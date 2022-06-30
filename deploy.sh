@@ -41,7 +41,7 @@ mkdir -p "$NEW_RELEASE_DIRECTORY"
 
 # Pull and copy the latest changes from the repo directory to the new release directory
 echo -e "\nPulling the latest changes from GitHub..."
-cd "$REPO_DIRECTORY" && git pull origin --rebase $FORGE_SITE_BRANCH && rsync -a "$REPO_DIRECTORY/" "$NEW_RELEASE_DIRECTORY"
+cd "$REPO_DIRECTORY" && git reset --hard && git pull origin --rebase $FORGE_SITE_BRANCH && rsync -a "$REPO_DIRECTORY/" "$NEW_RELEASE_DIRECTORY"
 
 # Check if the rebrand directory exists and copy it to the shared storage directory
 [ -d "$REBRAND_DIRECTORY" ] && { rsync -a "$REBRAND_DIRECTORY" "$SHARED_STORAGE_DIRECTORY"; }
