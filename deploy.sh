@@ -16,10 +16,13 @@ RELEASE_NAME=$(date +"%d%m%Y_%H%M%S")
 NEW_RELEASE_DIRECTORY="$RELEASES_DIRECTORY/$RELEASE_NAME"
 
 REBRAND_DIRECTORY="$NEW_RELEASE_DIRECTORY/storage/rebrand"
+ENV_EXAMPLE_FILE="$NEW_RELEASE_DIRECTORY/.env.example"
 
 SHARED_ASSETS_DIRECTORY="$SHARED_DIRECTORY/cms-assets"
 SHARED_STORAGE_DIRECTORY="$SHARED_DIRECTORY/storage"
 SHARED_VENDOR_DIRECTORY="$SHARED_DIRECTORY/vendor"
+SHARED_ENV_FILE="$SHARED_DIRECTORY/.env"
+
 
 # Set the parent of the site directory to the current working directory
 cd "$SITE_DIRECTORY" && cd ../
@@ -43,15 +46,23 @@ cd "$REPO_DIRECTORY" && git pull origin --rebase $FORGE_SITE_BRANCH && rsync -a 
 # Check if the rebrand directory exists and copy it to the shared storage directory
 [ -d "$REBRAND_DIRECTORY" ] && { rsync -a "$REBRAND_DIRECTORY" "$SHARED_STORAGE_DIRECTORY"; }
 
-# Check if any of the shared directories already exist in the new release directory and delete them
+# Check if the shared .env file exists
+[ ! -f "$SHARED_ENV_FILE" ] && {
+	# Check if the .env.example file exists and copy it to the shared directory, otherwise create a new shared .env file
+	[ -f "$ENV_EXAMPLE_FILE" ] && { mv "$ENV_EXAMPLE_FILE" "$SHARED_ENV_FILE"; } || { touch "$SHARED_ENV_FILE"; };
+}
+
+# Check if any of the shared directories or files already exist in the new release directory and delete them
 rm -rf "$NEW_RELEASE_DIRECTORY/web/cms-assets"
 rm -rf "$NEW_RELEASE_DIRECTORY/storage"
 rm -rf "$NEW_RELEASE_DIRECTORY/vendor"
+rm -f "$NEW_RELEASE_DIRECTORY/.env"
 
-# Create or update the symlinks for each of the shared directories
+# Create or update the symlinks for each of the shared directories and files
 ln -sfn "$SHARED_ASSETS_DIRECTORY" "$NEW_RELEASE_DIRECTORY/web/cms-assets"
 ln -sfn "$SHARED_STORAGE_DIRECTORY" "$NEW_RELEASE_DIRECTORY/storage"
 ln -sfn "$SHARED_VENDOR_DIRECTORY" "$NEW_RELEASE_DIRECTORY/vendor"
+ln -sfn "$SHARED_ENV_FILE" "$NEW_RELEASE_DIRECTORY/.env"
 
 # Set the new release directory to the current working directory
 cd "$NEW_RELEASE_DIRECTORY"
