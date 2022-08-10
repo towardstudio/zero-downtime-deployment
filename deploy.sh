@@ -18,7 +18,7 @@ NEW_RELEASE_DIRECTORY="$RELEASES_DIRECTORY/$RELEASE_NAME"
 REBRAND_DIRECTORY="$NEW_RELEASE_DIRECTORY/storage/rebrand"
 ENV_EXAMPLE_FILE="$NEW_RELEASE_DIRECTORY/.env.example"
 
-SHARED_ASSETS_DIRECTORY="$SHARED_DIRECTORY/cms-assets"
+SHARED_ASSETS_DIRECTORY="$SHARED_DIRECTORY/assets"
 SHARED_STORAGE_DIRECTORY="$SHARED_DIRECTORY/storage"
 SHARED_VENDOR_DIRECTORY="$SHARED_DIRECTORY/vendor"
 SHARED_ENV_FILE="$SHARED_DIRECTORY/.env"
@@ -53,13 +53,13 @@ cd "$REPO_DIRECTORY" && git reset --hard && git pull origin --rebase $FORGE_SITE
 }
 
 # Check if any of the shared directories or files already exist in the new release directory and delete them
-rm -rf "$NEW_RELEASE_DIRECTORY/web/cms-assets"
+rm -rf "$NEW_RELEASE_DIRECTORY/web/assets"
 rm -rf "$NEW_RELEASE_DIRECTORY/storage"
 rm -rf "$NEW_RELEASE_DIRECTORY/vendor"
 rm -f "$NEW_RELEASE_DIRECTORY/.env"
 
 # Create or update the symlinks for each of the shared directories and files
-ln -sfn "$SHARED_ASSETS_DIRECTORY" "$NEW_RELEASE_DIRECTORY/web/cms-assets"
+ln -sfn "$SHARED_ASSETS_DIRECTORY" "$NEW_RELEASE_DIRECTORY/web/assets"
 ln -sfn "$SHARED_STORAGE_DIRECTORY" "$NEW_RELEASE_DIRECTORY/storage"
 ln -sfn "$SHARED_VENDOR_DIRECTORY" "$NEW_RELEASE_DIRECTORY/vendor"
 ln -sfn "$SHARED_ENV_FILE" "$NEW_RELEASE_DIRECTORY/.env"
