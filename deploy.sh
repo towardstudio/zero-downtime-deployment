@@ -91,4 +91,8 @@ cd "$SITE_DIRECTORY"
 # Create or update the symlink for the current directory
 ln -sfn "$NEW_RELEASE_DIRECTORY" "current"
 
+# Reload the PHP FastCGI Process Manager to ensure the new symlinks are detected
+echo -e "\nReloading PHP FPM..."
+sudo service "$FORGE_PHP_FPM" reload
+
 echo -e "\nDeployment complete! 🎉"
